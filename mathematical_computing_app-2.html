@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101827">
+<title>Mathematical Computing</title>
+<style>
+:root{--bg:#0b1220;--panel:#121d2e;--panel2:#18263a;--line:#2a3a51;--text:#f4f7fb;--muted:#9aabc1;--accent:#69e0c0;--accent2:#8bb7ff;--danger:#ff8e9b}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#172a43 0,#0b1220 55%);color:var(--text);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh}
+header{padding:25px 20px 18px;max-width:850px;margin:auto} .eyebrow{color:var(--accent);font-size:.75rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase}
+h1{font-size:clamp(1.65rem,6vw,2.4rem);line-height:1.12;margin:8px 0}header p{color:var(--muted);margin:9px 0 0}
+main{max-width:850px;margin:auto;padding:0 16px 36px}
+.nav{display:flex;gap:8px;overflow:auto;padding:0 0 14px;scrollbar-width:none}.nav button{white-space:nowrap;border:1px solid var(--line);background:var(--panel);color:var(--muted);padding:10px 13px;border-radius:12px;font-weight:700}.nav button.active{background:var(--accent);color:#082019;border-color:var(--accent)}
+.card{display:none;background:rgba(18,29,46,.96);border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:0 18px 45px #0002}.card.active{display:block}.card h2{margin:0 0 5px;font-size:1.25rem}.sub{color:var(--muted);margin:0 0 20px;font-size:.92rem}
+label{display:block;color:#d7e2f0;font-size:.9rem;font-weight:650;margin:13px 0 6px}input,select{width:100%;background:#0b1422;border:1px solid #34475f;color:var(--text);border-radius:12px;padding:13px 12px;font:inherit;outline:none}input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px #69e0c022}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.actions{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}button.primary{border:0;background:var(--accent);color:#06251d;border-radius:12px;padding:12px 17px;font:inherit;font-weight:800;cursor:pointer}button.secondary{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:12px;padding:12px 15px;font:inherit;font-weight:700}
+.result{margin-top:18px;padding:15px;border:1px solid #31594f;background:#102a2a;border-radius:14px;display:none}.result.show{display:block}.result .caption{font-size:.78rem;color:var(--accent);font-weight:800;text-transform:uppercase;letter-spacing:.1em}.answer{font-size:1.45rem;font-weight:800;overflow-wrap:anywhere;margin-top:5px}.detail{color:#c4d3e5;font-size:.92rem;margin-top:5px;overflow-wrap:anywhere}.error{border-color:#633945;background:#301b27}.error .caption{color:var(--danger)}
+footer{max-width:850px;margin:auto;padding:0 20px 28px;color:var(--muted);font-size:.82rem;text-align:center}
+@media(min-width:650px){.card{padding:26px}.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Class XII • Project</div>
+  <h1>Mathematical Computing</h1>
+  <p>A simple mathematics toolkit powered by calculations and formulas.</p>
+</header>
+<main>
+  <nav class="nav" aria-label="Calculator tools">
+    <button class="active" data-tab="basic">Basic</button>
+    <button data-tab="percent">Percentage</button>
+    <button data-tab="average">Average</button>
+    <button data-tab="quadratic">Quadratic</button>
+    <button data-tab="circle">Circle area</button>
+  </nav>
+
+  <section class="card active" id="basic">
+    <h2>Basic calculations</h2><p class="sub">Add, subtract, multiply or divide two numbers.</p>
+    <div class="grid">
+      <div><label for="a">First number</label><input id="a" type="number" step="any" placeholder="e.g. 25"></div>
+      <div><label for="b">Second number</label><input id="b" type="number" step="any" placeholder="e.g. 15"></div>
+    </div>
+    <label for="op">Operation</label><select id="op"><option value="+">Addition (+)</option><option value="-">Subtraction (−)</option><option value="*">Multiplication (×)</option><option value="/">Division (÷)</option></select>
+    <div class="actions"><button class="primary" onclick="basic()">Calculate answer</button><button class="secondary" onclick="clearResult('basicResult')">Clear result</button></div>
+    <div class="result" id="basicResult" aria-live="polite"></div>
+  </section>
+
+  <section class="card" id="percent">
+    <h2>Percentage calculator</h2><p class="sub">Find what percentage one number is of another.</p>
+    <label for="marks">Marks obtained / value</label><input id="marks" type="number" step="any" placeholder="e.g. 80">
+    <label for="total">Total marks / total value</label><input id="total" type="number" step="any" placeholder="e.g. 100">
+    <div class="actions"><button class="primary" onclick="percentage()">Calculate percentage</button><button class="secondary" onclick="clearResult('percentResult')">Clear result</button></div>
+    <div class="result" id="percentResult" aria-live="polite"></div>
+  </section>
+
+  <section class="card" id="average">
+    <h2>Average calculator</h2><p class="sub">Enter numbers separated by commas or spaces.</p>
+    <label for="numbers">Numbers</label><input id="numbers" type="text" placeholder="e.g. 10, 20, 30">
+    <div class="actions"><button class="primary" onclick="average()">Calculate average</button><button class="secondary" onclick="clearResult('averageResult')">Clear result</button></div>
+    <div class="result" id="averageResult" aria-live="polite"></div>
+  </section>
+
+  <section class="card" id="quadratic">
+    <h2>Quadratic equation solver</h2><p class="sub">Solve ax² + bx + c = 0. The coefficient a cannot be zero.</p>
+    <div class="grid three">
+      <div><label for="qa">Coefficient a</label><input id="qa" type="number" step="any" placeholder="1"></div>
+      <div><label for="qb">Coefficient b</label><input id="qb" type="number" step="any" placeholder="-5"></div>
+      <div><label for="qc">Coefficient c</label><input id="qc" type="number" step="any" placeholder="6"></div>
+    </div>
+    <div class="actions"><button class="primary" onclick="quadratic()">Find roots</button><button class="secondary" onclick="clearResult('quadResult')">Clear result</button></div>
+    <div class="result" id="quadResult" aria-live="polite"></div>
+  </section>
+
+  <section class="card" id="circle">
+    <h2>Area of a circle</h2><p class="sub">Calculate the area using A = πr².</p>
+    <label for="radius">Radius</label><input id="radius" type="number" min="0" step="any" placeholder="e.g. 7">
+    <div class="actions"><button class="primary" onclick="circleArea()">Calculate area</button><button class="secondary" onclick="clearResult('circleResult')">Clear result</button></div>
+    <div class="result" id="circleResult" aria-live="polite"></div>
+  </section>
+</main>
+<footer>Mathematical Computing • Built for a Class XII working-model project</footer>
+<script>
+document.querySelectorAll('.nav button').forEach(btn=>btn.addEventListener('click',()=>{
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b===btn));
+  document.querySelectorAll('.card').forEach(c=>c.classList.toggle('active',c.id===btn.dataset.tab));
+}));
+function num(id){const raw=document.getElementById(id).value.trim();if(raw==='')throw new Error('Please fill in all required fields.');const n=Number(raw);if(!Number.isFinite(n))throw new Error('Please enter a valid number.');return n}
+function show(id,title,value,detail=''){const el=document.getElementById(id);el.className='result show';el.innerHTML='';const cap=document.createElement('div');cap.className='caption';cap.textContent=title;const ans=document.createElement('div');ans.className='answer';ans.textContent=value;el.append(cap,ans);if(detail){const d=document.createElement('div');d.className='detail';d.textContent=detail;el.append(d)}}
+function fail(id,msg){show(id,'Check your input',msg);document.getElementById(id).classList.add('error')}
+function clearResult(id){const e=document.getElementById(id);e.className='result';e.textContent=''}
+function fmt(n){if(Math.abs(n)<1e-12)n=0;return Number(n.toPrecision(10)).toString()}
+function basic(){try{const a=num('a'),b=num('b'),op=document.getElementById('op').value;let r;if(op==='+')r=a+b;else if(op==='-')r=a-b;else if(op==='*')r=a*b;else{if(b===0)throw new Error('Division by zero is not allowed.');r=a/b}show('basicResult','Answer',fmt(r),`${fmt(a)} ${op} ${fmt(b)} = ${fmt(r)}`)}catch(e){fail('basicResult',e.message)}}
+function percentage(){try{const m=num('marks'),t=num('total');if(t===0)throw new Error('Total value cannot be zero.');const p=m/t*100;show('percentResult','Percentage',fmt(p)+'%',`(${fmt(m)} ÷ ${fmt(t)}) × 100`)}catch(e){fail('percentResult',e.message)}}
+function average(){try{const s=document.getElementById('numbers').value.trim();if(!s)throw new Error('Enter at least one number.');const parts=s.split(/[\s,]+/).filter(Boolean);const ns=parts.map(Number);if(ns.some(n=>!Number.isFinite(n)))throw new Error('Use numbers separated by commas or spaces.');const sum=ns.reduce((x,y)=>x+y,0),avg=sum/ns.length;show('averageResult','Average',fmt(avg),`Sum = ${fmt(sum)} • Count = ${ns.length}`)}catch(e){fail('averageResult',e.message)}}
+function quadratic(){try{const a=num('qa'),b=num('qb'),c=num('qc');if(a===0)throw new Error('Coefficient a must not be zero.');const d=b*b-4*a*c;if(d>=0){const x1=(-b+Math.sqrt(d))/(2*a),x2=(-b-Math.sqrt(d))/(2*a);show('quadResult','Roots',`${fmt(x1)} and ${fmt(x2)}`,`Discriminant (b² − 4ac) = ${fmt(d)}`)}else{const real=-b/(2*a),imag=Math.sqrt(-d)/(2*Math.abs(a));show('quadResult','Complex roots',`${fmt(real)} ± ${fmt(imag)}i`,`Discriminant (b² − 4ac) = ${fmt(d)}`)}}catch(e){fail('quadResult',e.message)}}
+function circleArea(){try{const r=num('radius');if(r<0)throw new Error('Radius cannot be negative.');const area=Math.PI*r*r;show('circleResult','Area',fmt(area)+' square units',`A = πr² = π × ${fmt(r)}²`)}catch(e){fail('circleResult',e.message)}}
+</script>
+</body>
+</html>
